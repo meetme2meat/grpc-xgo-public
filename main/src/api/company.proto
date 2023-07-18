@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+option go_package = "/gen";
+
+package companypb;
+
+import "validate/validate.proto";
+
+message Company {
+  string id = 1 [(validate.rules).string.uuid = true];
+  string name = 2 [(validate.rules).string.max_len = 15];
+  optional string description = 3;
+  uint32 employee = 4;
+  bool registered = 5;
+  Type type = 6;
+}
+
+enum Type {
+  CORPORATION = 0;
+  NONPROFIT = 1;
+  COOPERATIVE = 2;
+  SOLE_PROPRIETORSHIP = 3;
+}
+
+
+service CompanyService {
+  rpc CreateCompany(CreateCompanyRequest) returns (CreateCompanyResponse);
+  rpc PatchCompany(PatchCompanyRequest) returns (PatchCompanyResponse);
+  rpc DeleteCompany(DeleteCompanyRequest) returns (DeleteCompanyResponse);
+  rpc GetCompany(GetCompanyRequest) returns (GetCompanyResponse);
+}
+
+message CompanyIdRequest {
+  string id = 1;
+}
+
+message CreateCompanyRequest {
+  Company company = 1;
+}
+
+message CreateCompanyResponse {
+  string id = 1;
+}
+
+message PatchCompanyRequest {
+  string id = 1;
+  Company company = 2;
+}
+
+message PatchCompanyResponse {
+  Company company = 1;
+}
+
+message DeleteCompanyRequest {
+  string id = 1;
+}
+
+message DeleteCompanyResponse {
+  string id = 1;
+}
+
+message GetCompanyRequest {
+  string id = 1;
+}
+
+message GetCompanyResponse {
+  Company company = 1;
+}
+

@@ -1,0 +1,42 @@
+// package kafka
+
+// import (
+// 	"context"
+// 	"xgo/src/event"
+
+// 	kafka2 "github.com/confluentinc/confluent-kafka-go/v2/kafka"
+// 	"go.uber.org/zap"
+// )
+
+// type Kafka struct {
+// 	producer *kafka2.Producer
+// }
+
+// func New() *Kafka {
+// 	producer, err := kafka2.NewProducer(&kafka2.ConfigMap{"bootstrap.servers": "localhost"})
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	return &Kafka{
+// 		producer: producer,
+// 	}
+// }
+
+// func (k *Kafka) Produce(ctx context.Context, topic string, ingestChan chan event.Event) {
+// 	defer k.producer.Close()
+// 	defer k.producer.Flush(0)
+// 	for {
+// 		select {
+// 		case <-ctx.Done():
+// 			return
+// 		case event := <-ingestChan:
+// 			if err := k.producer.Produce(&kafka2.Message{
+// 				TopicPartition: kafka2.TopicPartition{Topic: &topic, Partition: kafka2.PartitionAny},
+// 				Value:          event.Raw(),
+// 			}, nil); err != nil {
+// 				zap.L().Error("error publish kafka message", zap.Error(err))
+// 			}
+// 		}
+// 	}
+// }

@@ -1,0 +1,30 @@
+services:
+  nats:
+    image: nats:latest
+    container_name: nats
+    ports:
+      - "4222:4222"
+  # auth:
+  #   build: 
+  #     dockerfile: auth/Dockerfile
+  #   container_name: xauth
+  #   ports:
+  #     - "8200:8200"
+  xgo-sub: 
+    build:
+      dockerfile: main/Dockerfile.sub
+    container_name: xgo-sub
+    depends_on:
+      - nats
+  xgo:
+    build: 
+      dockerfile: main/Dockerfile
+    container_name: xgo
+    ports:
+      - "8100:8100"
+    depends_on:
+      - nats
+      - xgo-sub
+      # - xauth
+ 
+  

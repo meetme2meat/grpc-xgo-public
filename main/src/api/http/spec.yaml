@@ -1,0 +1,167 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/WERAIN/xgo/1.0.0
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Company Service API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: companies
+    description: ""
+paths:
+  '/companies/{id}':
+    get:
+      tags:
+        - companies
+      summary: retrieve the company detail
+      operationId: getCompany
+      description: |
+        By passing in the appropriate options, you can get company detail
+      parameters:
+        - in: path
+          name: id
+          description: pass the company id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: search result of company detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Companies'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: internal server error  
+    patch:
+      tags:
+        - companies
+      summary: update an the company
+      operationId: patchCompany
+      description: Update an existing company
+      parameters:
+        - in: path
+          name: id
+          description: pass the company id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Companies'
+      responses:
+        '200':
+          description: company update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentIdResponse'
+        '400':
+          description: 'invalid input, object invalid'
+    delete:
+      tags:
+        - companies
+      summary: delete an the company
+      operationId: deleteCompany
+      description: Delete an existing company
+      parameters:
+        - in: path
+          name: id
+          description: pass the company id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: company delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentIdResponse'
+        '400':
+          description: 'invalid input, object invalid'
+  '/companies':      
+    post:
+      tags:
+        - companies
+      summary: adds an new company
+      operationId: createCompany
+      description: Adds an company to the system
+      responses:
+        '201':
+          description: company created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentIdResponse'
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Companies'
+components:
+  schemas:
+    Companies:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - registered
+        - employeeCount
+        - companyType
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Google
+        description:
+          type: string
+          example: "Internet search engine"
+        registered:
+          type: boolean
+          example: true
+        employeeCount:
+          type: integer
+          example: 10
+        companyType:
+          type: string
+    ContentIdResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    ErrorResponse:
+      type: object
+      properties: 
+        error: 
+          description: "error occurred"
+          type: string
+          example: "Something went wrong"
